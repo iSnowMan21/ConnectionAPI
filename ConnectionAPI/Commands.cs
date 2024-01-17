@@ -12,10 +12,12 @@ namespace ConnectionAPI
     internal class Commands
     {
         ConnDB conn = new ConnDB();
+        int a = 0;
         public static void addFilm(ConnDB conn)
         {
             Console.WriteLine("Введите название фильма: ");
             string title = Console.ReadLine();
+            int b = 0;
 
             using var client = new HttpClient();
             client.BaseAddress = new Uri("https://www.omdbapi.com/");
