@@ -58,6 +58,12 @@ namespace ConnectionAPI
             conn.Delete(titleToDelete);
             Console.WriteLine($"Фильм с названием {titleToDelete} удален");
         }
+        public static void Info(ConnDB conn)
+        {
+        
+            int movieCount = conn.Count();
+            Console.WriteLine($"Количество фильмов в базе данных: {movieCount}");
+        }
     }
    }
 

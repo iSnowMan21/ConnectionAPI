@@ -19,8 +19,7 @@ namespace ConnectionAPI
                 Console.WriteLine("Доступные команды:");
                 Console.WriteLine("1. Add film");
                 Console.WriteLine("2. Delete movie");
-                Console.WriteLine("3. Search movie");
-                Console.WriteLine("4. Info");
+                Console.WriteLine("3. Info");
                 Console.WriteLine("Введите номер команды:");
                 string usInput = Console.ReadLine();
                 switch (usInput)
@@ -32,16 +31,10 @@ namespace ConnectionAPI
                         Commands.DeleteMovie(conn);
                         break;
                     case "3":
-                        Commands.SearchMovie();
-                        break;
-                    case "4":
-                        Commands.Info();
-                        break;
-                    case "5":
-                        Environment.Exit(0);
+                        Commands.Info(conn);
                         break;
                     default:
-                        Console.WriteLine("Некорректная команда. Попробуйте еще раз.");
+                        Console.WriteLine("Некорректная команда.");
                         break;
                 }
             }
