@@ -146,7 +146,7 @@ namespace ConnectionAPI
         public void Delete(string titleToDelete)
         {
             
-                string query = $"DELETE FROM film_info WHERE Title={titleToDelete}";
+                string query = $"DELETE FROM film_info WHERE Title= '{titleToDelete}'";
 
                 if (this.OpenConnection() == true)
                 {
