@@ -11,20 +11,19 @@ namespace ConnectionAPI
 {
     internal class Commands
     {
-        ConnDB conn = new ConnDB();
-        int a = 0;
         public static void addFilm(ConnDB conn)
         {
-            Console.WriteLine("Введите название фильма: ");
-            string title = Console.ReadLine();
-            int b = 0;
+
+
+            Console.WriteLine("Введите ключевое слово для поиска фильмов: ");
+            string keyword = Console.ReadLine();
 
             using var client = new HttpClient();
             client.BaseAddress = new Uri("https://www.omdbapi.com/");
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = client.GetAsync("?apikey=d554bc03&s=lord&page=2").Result;
+            var response = client.GetAsync($"?apikey=d554bc03&s={keyword}&page=1").Result;
             if (response.IsSuccessStatusCode)
             {
                 // Parse the response body
@@ -35,6 +34,13 @@ namespace ConnectionAPI
                 {
                     //Console.WriteLine(ans.search[0].Poster);
                     conn.Insert(ans);
+                }
+                if (ans != null)
+                {
+                    foreach (var item in ans.search)
+                    {
+                        Console.WriteLine(item.Title + "\t" + item.year);
+                    }
                 }
                 else
                 {
