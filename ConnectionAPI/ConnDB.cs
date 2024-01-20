@@ -143,18 +143,17 @@ namespace ConnectionAPI
         }
 
         //Delete statement
-        public void Delete(Answer ans)
+        public void Delete(string titleToDelete)
         {
-            foreach (var movie in ans.search)
-            {
-                string query = $"DELETE FROM film_info WHERE Title={movie.Title}";
+            
+                string query = $"DELETE FROM film_info WHERE Title={titleToDelete}";
 
                 if (this.OpenConnection() == true)
                 {
                     MySqlCommand cmd = new MySqlCommand(query, connection);
                     cmd.ExecuteNonQuery();
                     this.CloseConnection();
-                }
+                
             }
         }
 
