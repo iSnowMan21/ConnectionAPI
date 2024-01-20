@@ -28,7 +28,21 @@ namespace ConnectionAPI
                     case "1":
                         Commands.addFilm(conn);
                         break;
-                   
+                    case "2":
+                        Commands.DeleteMovie(conn);
+                        break;
+                    case "3":
+                        Commands.SearchMovie();
+                        break;
+                    case "4":
+                        Commands.Info();
+                        break;
+                    case "5":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("Некорректная команда. Попробуйте еще раз.");
+                        break;
                 }
             }
             

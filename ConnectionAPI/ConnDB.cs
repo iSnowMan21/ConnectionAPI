@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace ConnectionAPI
 {
@@ -142,15 +143,18 @@ namespace ConnectionAPI
         }
 
         //Delete statement
-        public void Delete()
+        public void Delete(Answer ans)
         {
-            string query = "DELETE FROM film_info WHERE Title='fwfw'";
-
-            if (this.OpenConnection() == true)
+            foreach (var movie in ans.search)
             {
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.ExecuteNonQuery();
-                this.CloseConnection();
+                string query = $"DELETE FROM film_info WHERE Title={movie.Title}";
+
+                if (this.OpenConnection() == true)
+                {
+                    MySqlCommand cmd = new MySqlCommand(query, connection);
+                    cmd.ExecuteNonQuery();
+                    this.CloseConnection();
+                }
             }
         }
 

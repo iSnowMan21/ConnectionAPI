@@ -20,7 +20,6 @@ namespace ConnectionAPI
 
             using var client = new HttpClient();
             client.BaseAddress = new Uri("https://www.omdbapi.com/");
-            // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
             var response = client.GetAsync($"?apikey=d554bc03&s={keyword}&page=1").Result;
@@ -48,9 +47,19 @@ namespace ConnectionAPI
                 }
 
             }
+
+        }
+        public static void DeleteMovie(ConnDB conn)
+        {
+            Console.WriteLine("Введите название фильма для удаления: ");
+            string titleToDelete = Console.ReadLine();
+
+           
+            conn.Delete(titleToDelete);
+            Console.WriteLine($"Фильм с названием {titleToDelete} удален");
         }
     }
-    }
+   }
 
 
 
