@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,41 +82,55 @@ namespace ConnectionAPI
         }
 
         //Insert statement
-       /* public void Insert(Answer ans)
+        /* public void Insert(Answer ans)
+         {
+             string query = "INSERT INTO film_info (IMDB_ID, Type, Title, Year, Poster) VALUES('1', 'movie', 'Lost', 2000, 'Lost in Island')";
+
+             //open connection
+             if (this.OpenConnection() == true)
+             {
+                 //create command and assign the query and connection from the constructor
+                 MySqlCommand cmd = new MySqlCommand(query, connection);
+
+                 //Execute command
+                 cmd.ExecuteNonQuery();
+
+                 //close connection
+                 this.CloseConnection();
+             }
+         }
+ */
+        private bool isMovieExists(string imdbID)
         {
-            string query = "INSERT INTO film_info (IMDB_ID, Type, Title, Year, Poster) VALUES('1', 'movie', 'Lost', 2000, 'Lost in Island')";
+            string query = $"SELECT IMDB_ID FROM film_info WHERE IMDB_ID = '{imdbID}'";
 
-            //open connection
-            if (this.OpenConnection() == true)
+            using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-
-                //Execute command
-                cmd.ExecuteNonQuery();
-
-                //close connection
-                this.CloseConnection();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    return reader.Read(); 
+                }
             }
         }
-*/
         internal void Insert(Answer ans)
         {
-
-            //open connection
             if (this.OpenConnection() == true)
             {
                 foreach (var movie in ans.search)
                 {
-                    string query = $"INSERT INTO film_info (IMDB_ID, Type, Title, Year, Poster) VALUES('{movie.imdbID}', '{movie.Type}', \"{movie.Title}\", '{movie.year}', '{movie.Poster}');";
-                    MySqlCommand cmd = new (query, connection);
-                    
-                    cmd.ExecuteNonQuery();
-                    Console.WriteLine(movie.Poster);
+                    if (!isMovieExists(movie.imdbID))
+                    {
+                        string query = $"INSERT INTO film_info (IMDB_ID, Type, Title, Year, Poster) VALUES('{movie.imdbID}', '{movie.Type}', \"{movie.Title}\", '{movie.year}', '{movie.Poster}');";
+                        MySqlCommand cmd = new MySqlCommand(query, connection);
+                        cmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Фильм с IMDBID {movie.imdbID} уже существует в базе данных");
+                    }
 
                 }
                 this.CloseConnection();
-
             }
         }
 
@@ -146,13 +161,13 @@ namespace ConnectionAPI
         public void Delete(string titleToDelete)
         {
             
-                string query = $"DELETE FROM film_info WHERE Title= '{titleToDelete}'";
+            string query = $"DELETE FROM film_info WHERE Title= \"{titleToDelete}\"";
 
-                if (this.OpenConnection() == true)
-                {
-                    MySqlCommand cmd = new MySqlCommand(query, connection);
-                    cmd.ExecuteNonQuery();
-                    this.CloseConnection();
+            if (this.OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.ExecuteNonQuery();
+                this.CloseConnection();
                 
             }
         }
@@ -160,6 +175,8 @@ namespace ConnectionAPI
         //Select statement
         /*public List<string>[] Select()
         {
+        select * from database where year = ...
+                                     name like "%keyword%"
         }*/
 
         //Count statement
@@ -188,7 +205,40 @@ namespace ConnectionAPI
             }
         }
 
-      
+        internal void InfoYear(string? yearMovie)
+        {
+
+            String query = $"SELECT* FROM film_info WHERE Year LIKE '{yearMovie}%'";
+            connection.Open();
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("imdbID- {0}, type - {1}, title - {2}\n", reader.GetString(0), reader.GetString(1), reader.GetString(2));
+
+                    }
+                }
+            }
+            connection.Close();
+        }
+        internal void InfoByTitle(string? titleMovie)
+        {
+            String query = $"SELECT * FROM film_info WHERE Title LIKE '{titleMovie}%'";
+            connection.Open();
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("imdbID- {0}, type - {1}, title - {2}\n", reader.GetString(0), reader.GetString(1), reader.GetString(2));
+                    }
+                }
+            }
+            connection.Close();
+        }
     }
     
 }

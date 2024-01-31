@@ -16,13 +16,15 @@ namespace ConnectionAPI
             
             while (true)
             {
+                Console.WriteLine("\n");
                 Console.WriteLine("Доступные команды:");
                 Console.WriteLine("1. Add film");
                 Console.WriteLine("2. Delete movie");
                 Console.WriteLine("3. Info");
                 Console.WriteLine("Введите номер команды:");
-                string usInput = Console.ReadLine();
-                switch (usInput)
+                Console.WriteLine("\n");
+                string input = Console.ReadLine();
+                switch (input)
                 {
                     case "1":
                         Commands.addFilm(conn);
@@ -34,7 +36,7 @@ namespace ConnectionAPI
                         Commands.Info(conn);
                         break;
                     default:
-                        Console.WriteLine("Некорректная команда.");
+                        Console.WriteLine("Некорректная команда");
                         break;
                 }
             }

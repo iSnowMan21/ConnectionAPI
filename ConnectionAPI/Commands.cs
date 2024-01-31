@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using ConnectionAPI;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
 namespace ConnectionAPI
@@ -13,7 +14,6 @@ namespace ConnectionAPI
     {
         public static void addFilm(ConnDB conn)
         {
-
 
             Console.WriteLine("Введите ключевое слово для поиска фильмов: ");
             string keyword = Console.ReadLine();
@@ -34,13 +34,6 @@ namespace ConnectionAPI
                     //Console.WriteLine(ans.search[0].Poster);
                     conn.Insert(ans);
                 }
-                if (ans != null)
-                {
-                    foreach (var item in ans.search)
-                    {
-                        Console.WriteLine(item.Title + "\t" + item.year);
-                    }
-                }
                 else
                 {
                     Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
@@ -58,12 +51,28 @@ namespace ConnectionAPI
             conn.Delete(titleToDelete);
             Console.WriteLine($"Фильм с названием {titleToDelete} удален");
         }
-        public static void Info(ConnDB conn)
+        public static void Count(ConnDB conn)
         {
-        
             int movieCount = conn.Count();
             Console.WriteLine($"Количество фильмов в базе данных: {movieCount}");
         }
+
+        public static void Info(ConnDB conn)
+        {
+            Console.WriteLine("Введите год для получения информации: ");
+            string? yearMovie = Console.ReadLine();
+
+
+            conn.InfoYear(yearMovie);
+        }
+        public static void InfoByTitle(ConnDB conn)
+        {
+            Console.WriteLine("Введите часть названия для поиска информации: ");
+            string? partialTitle = Console.ReadLine();
+
+            conn.InfoByTitle(partialTitle);
+        }
+
     }
    }
 
