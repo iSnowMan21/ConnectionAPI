@@ -223,7 +223,7 @@ namespace ConnectionAPI
         internal void InfoYear(string? yearMovie)
         {
 
-            String query = $"SELECT* FROM film_info WHERE Year = 'yearMovie' AND Type = 'movie'";
+            String query = $"SELECT* FROM film_info WHERE Year LIKE '{yearMovie}%'";
             connection.Open();
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
@@ -238,39 +238,7 @@ namespace ConnectionAPI
             }
             connection.Close();
             //------------------------------
-            query = $"SELECT * FROM film_info WHERE Type = 'series'";
-            connection.Open();
-            using (MySqlCommand command = new MySqlCommand(query, connection))
-            {
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        int searchYear = Convert.ToInt32(yearMovie);
-
-                        string year = reader.GetString(3);
-                        
-                        Console.WriteLine(year);
-                        int startYear = Convert.ToInt32(year[..4]);
-                        //
-                        if(year.Length == 5) { 
-                            if(startYear < searchYear)
-                                Console.WriteLine("imdbID- {0}, type - {1}, title - {2}\n", reader.GetString(0), reader.GetString(1), reader.GetString(2));
-                        }
-                        else
-                        {
-                            int endYear = Convert.ToInt32(year.Substring(5));
-                            if (startYear < searchYear && searchYear < endYear)
-                                Console.WriteLine("imdbID- {0}, type - {1}, title - {2}\n", reader.GetString(0), reader.GetString(1), reader.GetString(2));
-                        }
-
-                        // 
-
-
-                    }
-                }
-            }
-            connection.Close();
+           
         }
         internal void InfoByTitle(string? titleMovie)
         {
